@@ -1,0 +1,53 @@
+﻿@page "/dec2Bin"
+@rendermode InteractiveServer
+
+<PageTitle>Dec2Bin</PageTitle>
+
+<h3>Перевод десятичного числа в двоичную систему:</h3>
+
+<div class="calculate">
+	<div>
+		<label for="number">Десятичное число</label>
+		<input type="number"
+			   id="number"
+			   @bind="number"
+			   class="form-control" />
+	</div>
+
+	<button @onclick="Calculate" class="btn btn-primary">Вычислить</button>
+
+	@if (!string.IsNullOrEmpty(binaryResult))
+	{
+		<div>
+			<strong>Двоичное представление:</strong>
+			<div>@binaryResult</div>
+		</div>
+	}
+</div>
+
+@code
+{
+	private int? number;
+	private string? binaryResult;
+	private string? error;
+
+	private void Calculate()
+	{
+
+		if (number is null)
+		{
+			error = "Введите число.";
+			return;
+		}
+
+		try
+		{
+			binaryResult = Convert.ToString(number.Value, 2);
+		}
+		catch (Exception ex)
+		{
+			error = $"Ошибка перевода: {ex.Message}";
+		}
+	}
+}
+

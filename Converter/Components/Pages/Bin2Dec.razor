@@ -1,0 +1,70 @@
+﻿@page "/bin2Dec"
+@rendermode InteractiveServer
+
+<PageTitle>Bin2Dec</PageTitle>
+
+<h3>Перевод двоичного числа в десятичную:</h3>
+
+<div class="calculate">
+	<div>
+		<label for="binaryInput">Двоичное число</label>
+		<input type="text"
+			   id="binaryInput"
+			   @bind="binaryInput"
+			   class="form-control" />
+	</div>
+
+	<button @onclick="Calculate" class="btn btn-primary">Вычислить</button>
+
+	@if (decimalResult.HasValue)
+	{
+		<div>
+			<strong>Десятичное представление:</strong>
+			<div>@decimalResult</div>
+		</div>
+	}
+</div>
+
+@code
+{
+	private string? binaryInput;
+	private int? decimalResult;
+	private string? error;
+
+	private void Calculate()
+	{
+
+		if (string.IsNullOrWhiteSpace(binaryInput))
+		{
+			error = "Введите двоичное число.";
+			return;
+		}
+
+		foreach (var c in binaryInput)
+		{
+			if (c != '0' && c != '1')
+			{
+				error = "Вводите только цифры 0 и 1.";
+				return;
+			}
+		}
+
+		try
+		{
+			decimalResult = Convert.ToInt32(binaryInput, 2);
+		}
+		catch (FormatException)
+		{
+			error = "Некорректный формат двоичного числа.";
+		}
+		catch (OverflowException)
+		{
+			error = "Число слишком большое для int.";
+		}
+		catch (Exception ex)
+		{
+			error = $"Ошибка перевода: {ex.Message}";
+		}
+	}
+}
+

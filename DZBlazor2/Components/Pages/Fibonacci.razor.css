@@ -1,0 +1,13 @@
+.calculate, .calculate > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#calculate-result {
+    font-size: 32px;
+}
+
+input[type=number].form-control {
+    width: 128px;
+}

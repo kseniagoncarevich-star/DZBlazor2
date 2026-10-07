@@ -1,0 +1,67 @@
+﻿@page "/fibonacci"
+@rendermode InteractiveServer
+
+<PageTitle>Fibonacci</PageTitle>
+
+<h3>Числа Фибоначчи до указанного предела:</h3>
+
+<div class="calculate">
+	<div>
+		<label for="limit">Предел (максимальное значение)</label>
+		<input type="number"
+			   id="limit"
+			   @bind="limit"
+			   class="form-control" />
+	</div>
+
+	<button @onclick="Calculate" class="btn btn-primary">Вычислить</button>
+	
+	@if (fibonacciNumbers.Count > 0)
+	{
+		<div>
+			<strong>Числа Фибоначчи:</strong>
+			<div>
+				@foreach (var num in fibonacciNumbers)
+				{
+					<span>@num</span>
+				}
+			</div>
+		</div>
+	}
+</div>
+
+@code
+{
+	private int? limit;
+	private List<int> fibonacciNumbers = new();
+	private string? error;
+
+	private void Calculate()
+	{
+
+		fibonacciNumbers.Clear();
+
+		if (limit is null || limit <= 0)
+		{
+			error = "Введите положительное число как предел.";
+			return;
+		}
+
+		int a = 0;
+		int b = 1;
+
+		if (a <= limit.Value)
+		{
+			fibonacciNumbers.Add(a);
+		}
+
+		while (b <= limit.Value)
+		{
+			fibonacciNumbers.Add(b);
+			int next = a + b;
+			a = b;
+			b = next;
+		}
+	}
+}
+

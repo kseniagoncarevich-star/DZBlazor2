@@ -1,0 +1,52 @@
+﻿@page "/dec2Hex"
+@rendermode InteractiveServer
+
+<PageTitle>Dec2Hex</PageTitle>
+
+<h3>Перевод десятичного числа в шестнадцатиричную систему:</h3>
+
+<div class="calculate">
+	<div>
+		<label for="number">Десятичное число</label>
+		<input type="number"
+			   id="number"
+			   @bind="number"
+			   class="form-control" />
+	</div>
+
+	<button @onclick="Calculate" class="btn btn-primary">Вычислить</button>
+
+	@if (!string.IsNullOrEmpty(hexResult))
+	{
+		<div>
+			<strong>Шестнадцатиричное представление:</strong>
+			<div>@hexResult.ToUpper()</div>
+		</div>
+	}
+</div>
+
+@code
+{
+	private int? number;
+	private string? hexResult;
+	private string? error;
+
+	private void Calculate()
+	{
+
+		if (number is null)
+		{
+			error = "Введите число.";
+			return;
+		}
+
+		try
+		{
+			hexResult = Convert.ToString(number.Value, 16);
+		}
+		catch (Exception ex)
+		{
+			error = $"Ошибка перевода: {ex.Message}";
+		}
+	}
+}

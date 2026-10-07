@@ -1,0 +1,51 @@
+﻿@page "/power"
+@rendermode InteractiveServer
+
+<PageTitle>Power</PageTitle>
+
+<h3>Возведение в степень:</h3>
+
+<div class="calculate">
+	<div>
+		<label for="number">Число (основание)</label>
+		<input type="number"
+			   id="number"
+			   @bind="number"
+			   class="form-control" />
+	</div>
+	<div>
+		<label for="power">Степень</label>
+		<input type="number"
+			   id="power"
+			   @bind="power"
+			   class="form-control" />
+	</div>
+	
+	<button @onclick="Calculate" class="btn btn-primary">Вычислить</button>
+	
+	@if (result.HasValue)
+	{
+		<div>
+			Результат: <strong>@number<sup>@power</sup> = @result</strong>
+		</div>
+	}
+
+</div>
+@code 
+{
+	private double? number;
+	private int? power;
+	private double? result;
+	private string? error;
+
+	private void Calculate()
+	{
+
+		if (number == null || power == null)
+		{
+			error = "Заполните оба поля.";
+			return;
+		}
+		result = Math.Pow(number.Value, power.Value);
+	}
+}

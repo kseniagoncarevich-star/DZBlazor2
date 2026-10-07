@@ -1,0 +1,70 @@
+﻿@page "/hex2Dec"
+@rendermode InteractiveServer
+
+<PageTitle>Hex2Dec</PageTitle>
+
+<h3>Перевод шестнадцатиричного числа в демятичную систему:</h3>
+
+<div class="calculate">
+	<div>
+		<label for="hexInput">Шестнадцатиричное число</label>
+		<input type="text"
+			   id="hexInput"
+			   @bind="hexInput"
+			   class="form-control" />
+	</div>
+
+	<button @onclick="Calculate" class="btn btn-primary">Вычислить</button>
+
+	@if (decimalResult.HasValue)
+	{
+		<div>
+			<strong>Десятичное представление:</strong>
+			<div>@decimalResult</div>
+		</div>
+	}
+</div>
+
+@code
+{
+	private string? hexInput;
+	private int? decimalResult;
+	private string? error;
+
+	private void Calculate()
+	{
+
+		if (string.IsNullOrWhiteSpace(hexInput))
+		{
+			error = "Введите шестнадцатеричное число.";
+			return;
+		}
+
+		var cleanInput = hexInput.Trim().TrimStart('0', 'x', 'X');
+
+		foreach (var c in cleanInput)
+		{
+			if (!((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f')))
+			{
+				error = "Вводите только цифры 0–9 и буквы A–F (можно с префиксом 0x).";
+				return;
+			}
+		}
+		try
+		{
+			decimalResult = Convert.ToInt32(cleanInput, 16);
+		}
+		catch (FormatException)
+		{
+			error = "Некорректный формат шестнадцатеричного числа.";
+		}
+		catch (OverflowException)
+		{
+			error = "Число слишком большое для int.";
+		}
+		catch (Exception ex)
+		{
+			error = $"Ошибка перевода: {ex.Message}";
+		}
+	}
+}
